@@ -9,7 +9,7 @@ fetch("https://pokeapi.co/api/v2/pokemon/")
       const name = result.name;
       const url = result.url;
 
-      //   crear nodos
+      // crear nodos
       const li = document.createElement("li");
       const a = document.createElement("a");
 
