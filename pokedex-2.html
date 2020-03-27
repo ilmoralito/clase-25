@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        height: 100vh;
+        margin: 0;
+        font-family: sans-serif;
+        display: flex;
+        background-color: #222222;
+        color: white;
+      }
+
+      a {
+        color: white;
+      }
+
+      #pokemons {
+        flex: 1;
+        background-color: #444444;
+        padding: 10px;
+      }
+
+      #pokemon {
+        padding: 10px;
+        flex: 2;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="pokemons"></div>
+    <div id="pokemon">
+      <h1>Select a pokemon</h1>
+    </div>
+    <script>
+      const pokemonsNode = document.querySelector("#pokemons");
+      const pokemonNode = document.querySelector("#pokemon");
+
+      pokemonsNode.addEventListener("click", clickHandler);
+
+      function getPokemons() {
+        pokemonsNode.textContent = "Is loading...";
+
+        fetch("https://pokeapi.co/api/v2/pokemon/")
+          .then(response => response.json())
+          .then(data => {
+            pokemonsNode.textContent = "";
+
+            renderPokemons(data.results);
+          })
+          .catch(error => alert(error.message));
+      }
+
+      function renderPokemons(pokemons) {
+        for (const pokemon of pokemons) {
+          const p = document.createElement("p");
+          const a = document.createElement("a");
+
+          a.setAttribute("href", pokemon.url);
+          a.textContent = pokemon.name;
+
+          p.append(a);
+
+          pokemonsNode.append(p);
+        }
+      }
+
+      function fetchPokemon(url) {
+        fetch(url)
+          .then(response => response.json())
+          .then(pokemon => renderPokemon(pokemon));
+      }
+
+      function renderPokemon(pokemon) {
+        const name = pokemon.name;
+        const sprites = pokemon.sprites;
+        const abilities = pokemon.abilities;
+
+        const h1 = document.createElement("h1");
+        const ul = document.createElement("ul");
+
+        // name
+        h1.textContent = name;
+
+        // clean pokemon node content
+        pokemonNode.innerHTML = "";
+
+        // append content
+        pokemonNode.append(h1);
+
+        // sprites
+        for (const key in sprites) {
+          const img = document.createElement("img");
+          const sprite = sprites[key];
+
+          console.log(sprite);
+
+          if (sprite) {
+            img.setAttribute("src", sprite);
+            pokemonNode.append(img);
+          }
+        }
+
+        // abilities
+        for (const ability of abilities) {
+          const li = document.createElement("li");
+
+          li.textContent = ability.ability.name;
+
+          ul.append(li);
+        }
+
+        // append abilities
+        pokemonNode.append(ul);
+      }
+
+      function clickHandler(event) {
+        const target = event.target;
+
+        if (target.nodeName !== "A") {
+          return false;
+        }
+
+        event.preventDefault();
+
+        fetchPokemon(target.getAttribute("href"));
+      }
+
+      // initial function
+      getPokemons();
+    </script>
+  </body>
+</html>
