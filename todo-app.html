@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: sans-serif;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        height: 100vh;
+        background-color: #222222;
+      }
+
+      form {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      form input {
+        margin-right: 10px;
+        flex: 2;
+      }
+
+      form button {
+        flex: 1;
+      }
+
+      h1 {
+        margin: 0 0 5px 0;
+        text-align: center;
+      }
+
+      input[type="text"],
+      button {
+        border: 1px solid #e6e6e6;
+        padding: 10px;
+        border-radius: 4px;
+      }
+
+      #todo-app {
+        background-color: white;
+        border: 1px solid gray;
+        padding: 10px;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      ul li {
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #dddddd;
+      }
+
+      ul li:last-child {
+        border-bottom: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="todo-app">
+      <h1>Todo app</h1>
+      <form autocomplete="off">
+        <input type="text" id="task" placeholder="Task" />
+        <button type="submit">Add task</button>
+      </form>
+      <ul id="todo-list"></ul>
+    </div>
+
+    <script>
+      const form = document.querySelector("form");
+      const todoList = document.querySelector("ul#todo-list");
+
+      function submitHandler(event) {
+        event.preventDefault();
+
+        const task = event.target.task;
+
+        if (!task.value) {
+          alert("Task is required!");
+
+          return false;
+        }
+
+        createTodo(task.value);
+
+        // clean task content
+        event.target.task.value = "";
+
+        // set focus to task input
+        event.target.task.focus();
+      }
+
+      function changeHandler(event) {
+        const target = event.target;
+
+        if (target.nodeName !== "INPUT") {
+          return false;
+        }
+
+        if (target.checked) {
+          target.previousSibling.style.textDecoration = "line-through";
+
+          return false;
+        }
+
+        target.previousSibling.style.textDecoration = "";
+      }
+
+      function createTodo(task) {
+        const list = document.createElement("li");
+        const span = document.createElement("span");
+        const checkbox = document.createElement("input");
+        const text = document.createTextNode(task);
+
+        checkbox.setAttribute("type", "checkbox");
+
+        span.append(text);
+
+        list.append(span);
+        list.append(checkbox);
+
+        todoList.append(list);
+      }
+
+      form.addEventListener("submit", submitHandler);
+      todoList.addEventListener("change", changeHandler);
+    </script>
+  </body>
+</html>
