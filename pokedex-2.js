@@ -3,17 +3,24 @@ const pokemonNode = document.querySelector("#pokemon");
 
 pokemonsNode.addEventListener("click", clickHandler);
 
-function getPokemons() {
+async function getPokemons() {
   pokemonsNode.textContent = "Is loading...";
 
-  fetch("https://pokeapi.co/api/v2/pokemon/")
-    .then(response => response.json())
-    .then(data => {
-      pokemonsNode.textContent = "";
+  // METODO USANDO ASYNC AWAIT
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/");
+  const data = await response.json();
 
-      renderPokemons(data.results);
-    })
-    .catch(error => alert(error.message));
+  return data.results;
+
+  // METODO USANDO PROMISES
+  // fetch("https://pokeapi.co/api/v2/pokemon/")
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     pokemonsNode.textContent = "";
+
+  //     renderPokemons(data.results);
+  //   })
+  //   .catch(error => alert(error.message));
 }
 
 function renderPokemons(pokemons) {
@@ -141,4 +148,8 @@ function clickHandler(event) {
 }
 
 // initial function
-getPokemons();
+getPokemons().then(pokemons => {
+  pokemonsNode.textContent = "";
+
+  renderPokemons(pokemons);
+});
