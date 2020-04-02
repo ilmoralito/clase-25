@@ -71,4 +71,8 @@ function onComplete(films) {
   root.append(table);
 }
 
-fetchFilms().then(films => onComplete(films));
+fetchFilms().then(films => {
+  root.textContent = "";
+
+  onComplete(films);
+});
