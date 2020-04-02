@@ -1,0 +1,19 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+table {
+  width: 100%;
+  border: 1px solid #222222;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  padding: 10px;
+  border: 1px solid #222222;
+}
